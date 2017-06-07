@@ -32,7 +32,7 @@ ID_DB.push(0); // Default ID for test purpopses
 /* Function to setup and initialize 
 conversation parameters and records in CONV_DB */
 function setupConv(id) { 
-    convoDB[id] = {
+    CONV_DB[id] = {
         numMsgs: 0,
         product: {
             type: 'NA',
@@ -61,3 +61,9 @@ app.get(_ENDPOINT + 'id', function(req, res){
     res.end(JSON.stringify({id: id}));
     console.log('ID Request addressed. Sent ID : '+ JSON.stringify({id: id}));
 });
+
+/*----------------------------------------------------------------------------------------------------*/
+// Setup and Start the server
+
+app.listen(PORT);
+console.log("Server running. Waiting for messages...");
