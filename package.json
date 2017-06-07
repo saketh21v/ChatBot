@@ -4,7 +4,7 @@
   "description": "Chat bot for Dell customer Service",
   "main": "bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
   "author": "Saketh Vallakatla",
   "license": "ISC",
