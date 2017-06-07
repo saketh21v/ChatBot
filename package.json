@@ -2,10 +2,14 @@
   "name": "chatbot",
   "version": "1.0.0",
   "description": "Chat bot for Dell customer Service",
-  "main": "index.js",
+  "main": "bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Saketh Vallakatla",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "node-wit": "^4.2.0"
+  }
 }
