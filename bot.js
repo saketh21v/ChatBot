@@ -83,13 +83,14 @@ app.get(_ENDPOINT + 'id', function (req, res) {
     debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
 });
 
-app.use(_ENDPOINT + 'message', function (req, res) {
+app.post(_ENDPOINT + 'message', function (req, res) {
     debugPrint(req.session.conv_id);
     debugPrint(JSON.stringify(ID_DB.ids));
     if (!ID_DB.exists(req.session.conv_id)) {
         return res.status(401).end('{"status": "Session Expired"}');
     }
-    var msg = req.params.q;
+    debugPrint('Message = ' + req.body.m);
+    var msg = req.query.msg;
     debugPrint('Message Received: ' + msg);
     res.status(200).end('{"status": "Cool bruh"}');
 });
