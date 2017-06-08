@@ -32,11 +32,6 @@ const client = new Wit({ accessToken: Constants._TOKEN }); // Wit.ai client
 
 /*----------------------------------------------------------------------------------------------------*/
 
-// Initial setup
-ID_DB.addID(ID_Status(0)); // Default ID for test purpopses
-
-/*----------------------------------------------------------------------------------------------------*/
-
 // App Uses
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -67,13 +62,13 @@ function setupConv(id) {
 // ID generator: returns new ID
 function generateId() {
     var id = Math.round(Math.random() * 1000000000);
-    while (ID_DB.exists(id)) {
+    let id_sha = sha256(id.toString());
+    while (ID_DB.exists(id_s)) {
         id = Math.round(Math.random() * 1000000000);
     }
-    var id_sha = sha256(id.toString());
     var id_s = ID_Status(id_sha);
     ID_DB.addID(id_s);
-    return id;
+    return id_sha;
 }
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -88,9 +83,11 @@ app.get(_ENDPOINT + 'id', function (req, res) {
     debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
 });
 
-app.post(_ENDPOINT + 'message', function (req, res) {
+app.use(_ENDPOINT + 'message', function (req, res) {
+    debugPrint(req.session.conv_id);
+    debugPrint(JSON.stringify(ID_DB.ids));
     if (!ID_DB.exists(req.session.conv_id)) {
-        return res.end('{"status": "Session Expired"}');
+        return res.status(401).end('{"status": "Session Expired"}');
     }
     var msg = req.params.q;
     debugPrint('Message Received: ' + msg);
