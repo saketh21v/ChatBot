@@ -1,9 +1,12 @@
 'use strict'
 
+/*----------------------------------------------------------------------------------------------------*/
+
 // Libraries
 var express = require('express');
 var Wit = require('node-wit').Wit; // Wit.ai node SDK
 var session = require('express-session');
+var sha256 = require('sha256');
 var util = require('./lib/util.js');
 
 util._DEBUG = true;
@@ -54,9 +57,9 @@ function generateId() {
     var id = Math.round(Math.random() * 1000000000);
     while (ID_DB.exists(id)) {
         id = Math.round(Math.random() * 1000000000);
-        console.log('Trying ID = ' + id);
     }
-    var id_s = ID_Status(id);
+    var id_sha = sha256(id.toString());
+    var id_s = ID_Status(id_sha);
     ID_DB.addID(id_s);
     return id;
 }
