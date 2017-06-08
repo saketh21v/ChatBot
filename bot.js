@@ -5,6 +5,8 @@
 // Libraries
 var express = require('express');
 var Wit = require('node-wit').Wit; // Wit.ai node SDK
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var session = require('express-session');
 var sha256 = require('sha256');
 var util = require('./lib/util.js');
@@ -32,6 +34,16 @@ const client = new Wit({ accessToken: Constants._TOKEN }); // Wit.ai client
 
 // Initial setup
 ID_DB.addID(ID_Status(0)); // Default ID for test purpopses
+
+/*----------------------------------------------------------------------------------------------------*/
+
+// App Uses
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+    secret: 'Secret', saveUninitialized: false, resave: false
+}));
 
 /*----------------------------------------------------------------------------------------------------*/
 
@@ -71,13 +83,18 @@ app.get(_ENDPOINT + 'id', function (req, res) {
     debugPrint('Received ID request');
     var id = generateId();
     setupConv(id);
+    req.session.conv_id = id;
     res.end(JSON.stringify({ id: id }));
     debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
 });
 
-app.get(_ENDPOINT + 'message', function(req, res){
+app.post(_ENDPOINT + 'message', function (req, res) {
+    if (!ID_DB.exists(req.session.conv_id)) {
+        return res.end('{"status": "Session Expired"}');
+    }
     var msg = req.params.q;
     debugPrint('Message Received: ' + msg);
+    res.status(200).end('{"status": "Cool bruh"}');
 });
 
 /*----------------------------------------------------------------------------------------------------*/
