@@ -3,7 +3,10 @@
 // Libraries
 var express = require('express');
 var Wit = require('node-wit').Wit; // Wit.ai node SDK
+var session = require('express-session');
+var util = require('./lib/util.js');
 
+util._DEBUG = true;
 /*----------------------------------------------------------------------------------------------------*/
 
 // Constants
@@ -12,6 +15,8 @@ var CONV_DB = Constants.CONV_DB;
 var ID_DB = Constants.ID_DB
 var ID_Status = Constants.ID_Status;
 var _ENDPOINT = Constants._ENDPOINT;
+
+var debugPrint = util.debugPrint;
 
 /*----------------------------------------------------------------------------------------------------*/
 
@@ -60,11 +65,16 @@ function generateId() {
 
 // Routes and Endpoint functions
 app.get(_ENDPOINT + 'id', function (req, res) {
-    console.log('Received ID request');
+    debugPrint('Received ID request');
     var id = generateId();
     setupConv(id);
     res.end(JSON.stringify({ id: id }));
-    console.log('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
+    debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
+});
+
+app.get(_ENDPOINT + 'message', function(req, res){
+    var msg = req.params.q;
+    debugPrint('Message Received: ' + msg);
 });
 
 /*----------------------------------------------------------------------------------------------------*/
@@ -72,3 +82,5 @@ app.get(_ENDPOINT + 'id', function (req, res) {
 
 app.listen(PORT);
 console.log("Server running. Waiting for messages...");
+
+/*----------------------------------------------------------------------------------------------------*/

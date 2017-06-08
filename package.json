@@ -4,12 +4,15 @@
   "description": "Chat bot for Dell customer Service",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node bot.js",
+    "nodemon": "nodemon bot.js",
+    "debug": "_DEBUG=true nodemon bot.js"
   },
   "author": "Saketh Vallakatla",
   "license": "ISC",
   "dependencies": {
     "express": "^4.15.3",
+    "express-session": "^1.15.3",
     "node-wit": "^4.2.0"
   }
 }
