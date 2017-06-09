@@ -8,10 +8,9 @@ var Wit = require('node-wit').Wit; // Wit.ai node SDK
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var sha256 = require('sha256');
+var crypto = require('crypto');
 var util = require('./lib/util.js');
 
-util._DEBUG = true;
 /*----------------------------------------------------------------------------------------------------*/
 
 // Constants
@@ -22,6 +21,7 @@ var ID_Status = Constants.ID_Status;
 var _ENDPOINT = Constants._ENDPOINT;
 
 var debugPrint = util.debugPrint;
+var Message = Constants.Message;
 
 /*----------------------------------------------------------------------------------------------------*/
 
@@ -62,9 +62,10 @@ function setupConv(id) {
 // ID generator: returns new ID
 function generateId() {
     var id = Math.round(Math.random() * 1000000000);
-    let id_sha = sha256(id.toString());
-    while (ID_DB.exists(id_s)) {
+    let id_sha = crypto.createHmac('sha1', Constants._CRYPTO_SECRET).update(id.toString()).digest('hex');
+    while (ID_DB.exists(id_sha)) {
         id = Math.round(Math.random() * 1000000000);
+        id_sha = crypto.createHmac('sha1', Constants._CRYPTO_SECRET).update(id.toString()).digest('hex');
     }
     var id_s = ID_Status(id_sha);
     ID_DB.addID(id_s);
@@ -83,12 +84,24 @@ app.get(_ENDPOINT + 'id', function (req, res) {
     debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
 });
 
+app.use(_ENDPOINT + 'message', (req, res, next) => {
+    if (!ID_DB.exists(req.session.conv_id)) {
+        var msg = Message();
+        msg.conversation = '0000';
+        msg.from.id = Constants._BOT_ID // Default Bot ID
+        msg.from.name = '_bot';
+        msg.id = Constants.messageID();
+        msg.type = Constants.MTYPE.Error;
+        msg.text = "Session Expired";
+        return res.status(401).end(JSON.stringify(msg));
+    }
+    next();
+});
+
 app.post(_ENDPOINT + 'message', function (req, res) {
+    // Initial checking (Valid id and everything)
     debugPrint(req.session.conv_id);
     debugPrint(JSON.stringify(ID_DB.ids));
-    if (!ID_DB.exists(req.session.conv_id)) {
-        return res.status(401).end('{"status": "Session Expired"}');
-    }
     debugPrint('Message = ' + req.body.m);
     var msg = req.query.msg;
     debugPrint('Message Received: ' + msg);
