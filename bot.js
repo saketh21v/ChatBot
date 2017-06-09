@@ -22,6 +22,7 @@ var _ENDPOINT = Constants._ENDPOINT;
 
 var debugPrint = util.debugPrint;
 var Message = Constants.Message;
+var Conversation = Constants.Conversation;
 
 /*----------------------------------------------------------------------------------------------------*/
 
@@ -74,23 +75,14 @@ function generateId() {
 
 /*----------------------------------------------------------------------------------------------------*/
 
-// Routes and Endpoint functions
-app.get(_ENDPOINT + 'id', function (req, res) {
-    debugPrint('Received ID request');
-    var id = generateId();
-    setupConv(id);
-    req.session.conv_id = id;
-    res.end(JSON.stringify({ id: id }));
-    debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
-});
-
-app.use(_ENDPOINT + 'message', (req, res, next) => {
-    if (!ID_DB.exists(req.session.conv_id)) {
-        var msg = Message();
-        msg.conversation = '0000';
+// Custom Middleware 
+app.use(_ENDPOINT + 'message', (req, res, next) => { // Reject if expired session.
+    req.message = req.body;
+    if ((req.session.conversation == undefined) || !ID_DB.exists(req.session.conversation.id)) {
+        var msg = new Message();
+        msg.conversation = undefined;
         msg.from.id = Constants._BOT_ID // Default Bot ID
         msg.from.name = '_bot';
-        msg.id = Constants.messageID();
         msg.type = Constants.MTYPE.Error;
         msg.text = "Session Expired";
         return res.status(401).end(JSON.stringify(msg));
@@ -98,13 +90,29 @@ app.use(_ENDPOINT + 'message', (req, res, next) => {
     next();
 });
 
+// Routes and Endpoint functions
+app.get(_ENDPOINT + 'id', function (req, res) {
+    debugPrint('Received ID request');
+    var id = generateId();
+    setupConv(id);
+    req.session.conversation = new Conversation(id);
+    res.end(JSON.stringify({ id: id }));
+    debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
+});
+
+// Message parsing and reply construction.
+app.use(_ENDPOINT + 'message', function(req, res, next){
+    debugPrint('HH: ' + req.Message);
+    next();
+});
+
 app.post(_ENDPOINT + 'message', function (req, res) {
     // Initial checking (Valid id and everything)
-    debugPrint(req.session.conv_id);
-    debugPrint(JSON.stringify(ID_DB.ids));
-    debugPrint('Message = ' + req.body.m);
-    var msg = req.query.msg;
-    debugPrint('Message Received: ' + msg);
+    debugPrint("ID : " + req.session.conversation.id);
+    debugPrint('Message Received: ' + req.message.message);
+    var reply = req.session.conversation.createMessage();
+    reply.type = Constants.MTYPE.DefaultMessage;
+    reply.text = "I didn't get that. Could you please rephrase?";
     res.status(200).end('{"status": "Cool bruh"}');
 });
 
