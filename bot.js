@@ -102,9 +102,21 @@ app.get(_ENDPOINT + 'id', function (req, res) {
 
 // Message parsing and reply construction.
 app.use(_ENDPOINT + 'message', function(req, res, next){
-    debugPrint('HH: ' + req.Message);
+    debugPrint('HH: ' + req.message);
+    var msgText = req.message.text;
+    if(['Hi', 'Hey', 'Hello'].indexOf(msgText) != -1){ // Greeting [For now without wit.ai]
+        var reply = new Message(); 
+        reply.conversation = req.session.conversation;
+        reply.recepient = req.session.convID;
+        reply.type = Constants.MTYPE.Message;
+        reply.text = "Good day to you. What can I help you with?";
+        return res.status(200).end(JSON.stringify(reply));
+    }
     next();
 });
+
+/*  TODO: Figure out how to add functions to classes. 
+    Using 'new Message' instead of conversation.createMessage */
 
 app.post(_ENDPOINT + 'message', function (req, res) {
     // Initial checking (Valid id and everything)
