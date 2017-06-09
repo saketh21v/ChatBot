@@ -96,7 +96,7 @@ app.get(_ENDPOINT + 'id', function (req, res) {
     var id = generateId();
     setupConv(id);
     req.session.conversation = new Conversation(id);
-    res.end(JSON.stringify({ id: id }));
+    res.status(200).end(JSON.stringify({ id: id }));
     debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
 });
 
@@ -110,10 +110,11 @@ app.post(_ENDPOINT + 'message', function (req, res) {
     // Initial checking (Valid id and everything)
     debugPrint("ID : " + req.session.conversation.id);
     debugPrint('Message Received: ' + req.message.message);
-    var reply = req.session.conversation.createMessage();
+    var reply = new Message();
+    reply.conversation = req.session.conversation;
     reply.type = Constants.MTYPE.DefaultMessage;
     reply.text = "I didn't get that. Could you please rephrase?";
-    res.status(200).end('{"status": "Cool bruh"}');
+    res.status(200).end(JSON.stringify(reply));
 });
 
 /*----------------------------------------------------------------------------------------------------*/
