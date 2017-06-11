@@ -44,20 +44,10 @@ app.use(session({
 /*----------------------------------------------------------------------------------------------------*/
 
 // Util functions
-
-/* Function to setup and initialize 
-conversation parameters and records in CONV_DB */
-function setupConv(id) {
-    // CONV_DB[id] = {
-    //     numMsgs: 0,
-    //     product: {
-    //         type: 'NA',
-    //         service_tag: 'NA'
-    //     },
-    //     problem: 'NA',
-    //     results: {},
-    //     resolved: 'NA',
-    // };
+// Function to check if the given tag is valid
+// TODO: write functionality to connect to db and check if valid tag
+function isValidTag(tag){
+    return true;
 }
 
 // ID generator: returns new ID
@@ -79,13 +69,13 @@ function generateId() {
 app.use(_ENDPOINT + 'message', (req, res, next) => { // Reject if expired session.
     req.message = req.body;
     if ((req.session.conversation == undefined) || !ID_DB.exists(req.session.conversation.id)) {
-        var msg = new Message();
-        msg.conversation = undefined;
-        msg.from.id = Constants._BOT_ID // Default Bot ID
-        msg.from.name = '_bot';
-        msg.type = Constants.MTYPE.Error;
-        msg.text = "Session Expired";
-        return res.status(401).end(JSON.stringify(msg));
+        var reply = new Message();
+        reply.conversation = undefined;
+        reply.from.id = Constants._BOT_ID // Default Bot ID
+        reply.from.name = '_bot';
+        reply.type = Constants.MTYPE.Error;
+        reply.text = "Session Expired";
+        return res.status(401).end(reply.toString());
     }
     next();
 });
@@ -94,34 +84,81 @@ app.use(_ENDPOINT + 'message', (req, res, next) => { // Reject if expired sessio
 app.get(_ENDPOINT + 'id', function (req, res) {
     debugPrint('Received ID request');
     var id = generateId();
-    // setupConv(id);
     req.session.convID = id;
     req.session.conversation = new Conversation(id);
-    res.status(200).end(JSON.stringify({ id: id }));
+    var reply = CONV_DB[id].createMessage();
+    reply.type = Constants.MTYPE.ID_Message;
+    reply.message = {"id": id};
+    res.status(200).end(reply.toString());
     debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
 });
 
 // Message parsing and reply construction.
-app.use(_ENDPOINT + 'message', function(req, res, next){
-    debugPrint('HH: ' + req.message);
+app.use(_ENDPOINT + 'message', function (req, res, next) {
+    debugPrint('HH: ' + req.message.text);
     var msgText = req.message.text;
-    if(['Hi', 'Hey', 'Hello'].indexOf(msgText) != -1){ // Greeting [For now without wit.ai]
-        var reply = CONV_DB[req.session.convID].createMessage();
-        reply.type = Constants.MTYPE.Message;
-        reply.text = "Good day to you. What can I help you with?";
-        return res.status(200).end(JSON.stringify(reply));
+    // var msg = CONV_DB[req.session.convID].createMessage();
+    var msg = new Message();
+    msg.from = req.session.convID;
+    msg.recepient = Constants._BOT_ID;
+    msg.text =  msgText;
+    msg.timestamp = Date.now();
+    msg.type = Constants.MTYPE.UserMessage;
+
+    if (!req.session.conversation.serviceTagRequest) {
+        if (['Hi', 'Hey', 'Hello'].indexOf(msgText) != -1) { // Greeting [For now without wit.ai]
+            var reply = CONV_DB[req.session.convID].createMessage();
+            reply.type = Constants.MTYPE.Message;
+            reply.text = "Good day to you. What can I help you with?";
+            return res.status(200).end(reply.toString());
+        }
     }
-    if(["Bye", "I'm done", "Goodbye"].indexOf(msgText) != -1){
-        var reply = CONV_DB[req.session.convID].createMessage();        
+    if (["Bye", "I'm done", "Goodbye"].indexOf(msgText) != -1) {
+        var reply = CONV_DB[req.session.convID].createMessage();
         reply.type = Constants.MTYPE.Message;
         reply.text = "Bye! Please visit again :p";
         delete CONV_DB[req.session.convID];
         req.session.destroy();
-        return res.status(200).end(JSON.stringify(reply));
+        return res.status(200).end(reply.toString());
     }
-    client.message(msgText, {}).then((data) =>{
+    if (req.session.conversation.serviceTagRequest) {
+        if (!isValidTag(msgText)) {
+            var reply = CONV_DB[req.session.convID].createMessage();
+            reply.type = Constants.MTYPE.RequestServiceTag;
+            reply.text = "Please input only your service tag.";
+            req.session.conversation.serviceTagRequest = true;
+            return res.status(200).end(reply.toString());
+        }else{
+            req.session.conversation.serviceTag = msgText;
+            req.session.conversation.serviceTagRequest = false;
+            var reply = CONV_DB[req.session.convID].createMessage();
+            reply.type = Constants.MTYPE.Message;
+            reply.text = "Please give a description of your problem.";
+            return res.status(200).end(reply.toString());
+        }
+    }
 
-    }).catch(()=>{next()});
+    // msgText = "My mouse is troubling me";
+    client.message(msgText, {})
+        .then((data) => {
+            console.log(JSON.stringify(data));
+            if (data.entities['intent'] != undefined) msg.intent = data.entities['intent'][0].value;
+            // var reply = Replies.CreateReply();
+            if (data.entities['product'] != undefined) {
+                if (req.session.product == undefined) {
+                    req.session.product = data.entities['product'][0].value;
+                    var reply = CONV_DB[req.session.convID].createMessage();
+                    reply.type = Constants.MTYPE.RequestServiceTag;
+                    reply.text = "Please provide your device's service tag";
+
+                    req.session.conversation.serviceTagRequest = true;
+
+                    return res.status(200).end(reply.toString());
+                }
+            }
+            next();
+        })
+        .catch(console.error);
 });
 
 /*  TODO: Figure out how to add functions to classes. 
@@ -129,13 +166,12 @@ app.use(_ENDPOINT + 'message', function(req, res, next){
 
 app.post(_ENDPOINT + 'message', function (req, res) {
     // Initial checking (Valid id and everything)
-    debugPrint("ID : " + req.session.conversation.id);
-    debugPrint('Message Received: ' + req.message.message);
-    var reply = new Message();
-    reply.conversation = req.session.conversation;
+    // debugPrint("ID : " + req.session.conversation.id);
+    // debugPrint('Message Received: ' + req.message.message);
+    var reply = CONV_DB[req.session.convID].createMessage();
     reply.type = Constants.MTYPE.DefaultMessage;
     reply.text = "I didn't get that. Could you please rephrase?";
-    res.status(200).end(JSON.stringify(reply));
+    res.status(200).end(reply.toString());
 });
 
 /*----------------------------------------------------------------------------------------------------*/
