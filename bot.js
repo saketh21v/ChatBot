@@ -112,6 +112,14 @@ app.use(_ENDPOINT + 'message', function(req, res, next){
         reply.text = "Good day to you. What can I help you with?";
         return res.status(200).end(JSON.stringify(reply));
     }
+    if(["Bye", "I'm done", "Goodbye"].indexOf(msgText) != -1){
+        var reply = new Message();
+        reply.conversation = req.session.conversation;
+        reply.recepient = req.session.convID;
+        reply.type = Constants.MTYPE.Message;
+        reply.text = "Bye! Please visit again :p";
+        return res.status(200).end(JSON.stringify(reply));
+    }
     next();
 });
 
