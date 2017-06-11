@@ -41,6 +41,12 @@ app.use(session({
     secret: 'Secret', saveUninitialized: false, resave: false
 }));
 
+// Debug uses
+app.use((req, res, next) => {
+    debugPrint(JSON.stringify(Object.keys(CONV_DB)));
+    next();
+})
+
 /*----------------------------------------------------------------------------------------------------*/
 
 // Util functions
@@ -82,7 +88,7 @@ app.use(_ENDPOINT + 'message', (req, res, next) => { // Reject if expired sessio
 
 // Routes and Endpoint functions
 app.get(_ENDPOINT + 'id', function (req, res) {
-    debugPrint('Received ID request');
+    // debugPrint('Received ID request');
     var id = generateId();
     req.session.convID = id;
     req.session.conversation = new Conversation(id);
@@ -90,21 +96,22 @@ app.get(_ENDPOINT + 'id', function (req, res) {
     reply.type = Constants.MTYPE.ID_Message;
     reply.message = {"id": id};
     res.status(200).end(reply.toString());
-    debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
+    // debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
 });
 
 // Message parsing and reply construction.
 app.use(_ENDPOINT + 'message', function (req, res, next) {
-    debugPrint('HH: ' + req.message.text);
+    // debugPrint('HH: ' + req.message.text);
+    // Creating a client Message instance to add to conversation
     var msgText = req.message.text;
-    // var msg = CONV_DB[req.session.convID].createMessage();
-    var msg = new Message();
+    var msg = CONV_DB[req.session.convID].createMessage();
     msg.from = req.session.convID;
     msg.recepient = Constants._BOT_ID;
     msg.text =  msgText;
     msg.timestamp = Date.now();
     msg.type = Constants.MTYPE.UserMessage;
 
+    // If serviceTag request is not alive,[i.e., conversation.serviceTagRequest == false] 
     if (!req.session.conversation.serviceTagRequest) {
         if (['Hi', 'Hey', 'Hello'].indexOf(msgText) != -1) { // Greeting [For now without wit.ai]
             var reply = CONV_DB[req.session.convID].createMessage();
@@ -121,8 +128,9 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
         req.session.destroy();
         return res.status(200).end(reply.toString());
     }
+    // If serviceTag request is alive,[i.e., conversation.serviceTagRequest == true]
     if (req.session.conversation.serviceTagRequest) {
-        if (!isValidTag(msgText)) {
+        if (!isValidTag(msgText)) { // Re-request if service tag is not valid.
             var reply = CONV_DB[req.session.convID].createMessage();
             reply.type = Constants.MTYPE.RequestServiceTag;
             reply.text = "Please input only your service tag.";
@@ -141,7 +149,7 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
     // msgText = "My mouse is troubling me";
     client.message(msgText, {})
         .then((data) => {
-            console.log(JSON.stringify(data));
+            // console.log(JSON.stringify(data));
             if (data.entities['intent'] != undefined) msg.intent = data.entities['intent'][0].value;
             // var reply = Replies.CreateReply();
             if (data.entities['product'] != undefined) {
