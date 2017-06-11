@@ -48,16 +48,16 @@ app.use(session({
 /* Function to setup and initialize 
 conversation parameters and records in CONV_DB */
 function setupConv(id) {
-    CONV_DB[id] = {
-        numMsgs: 0,
-        product: {
-            type: 'NA',
-            service_tag: 'NA'
-        },
-        problem: 'NA',
-        results: {},
-        resolved: 'NA',
-    };
+    // CONV_DB[id] = {
+    //     numMsgs: 0,
+    //     product: {
+    //         type: 'NA',
+    //         service_tag: 'NA'
+    //     },
+    //     problem: 'NA',
+    //     results: {},
+    //     resolved: 'NA',
+    // };
 }
 
 // ID generator: returns new ID
@@ -94,7 +94,8 @@ app.use(_ENDPOINT + 'message', (req, res, next) => { // Reject if expired sessio
 app.get(_ENDPOINT + 'id', function (req, res) {
     debugPrint('Received ID request');
     var id = generateId();
-    setupConv(id);
+    // setupConv(id);
+    req.session.convID = id;
     req.session.conversation = new Conversation(id);
     res.status(200).end(JSON.stringify({ id: id }));
     debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
@@ -105,22 +106,22 @@ app.use(_ENDPOINT + 'message', function(req, res, next){
     debugPrint('HH: ' + req.message);
     var msgText = req.message.text;
     if(['Hi', 'Hey', 'Hello'].indexOf(msgText) != -1){ // Greeting [For now without wit.ai]
-        var reply = new Message(); 
-        reply.conversation = req.session.conversation;
-        reply.recepient = req.session.convID;
+        var reply = CONV_DB[req.session.convID].createMessage();
         reply.type = Constants.MTYPE.Message;
         reply.text = "Good day to you. What can I help you with?";
         return res.status(200).end(JSON.stringify(reply));
     }
     if(["Bye", "I'm done", "Goodbye"].indexOf(msgText) != -1){
-        var reply = new Message();
-        reply.conversation = req.session.conversation;
-        reply.recepient = req.session.convID;
+        var reply = CONV_DB[req.session.convID].createMessage();        
         reply.type = Constants.MTYPE.Message;
         reply.text = "Bye! Please visit again :p";
+        delete CONV_DB[req.session.convID];
+        req.session.destroy();
         return res.status(200).end(JSON.stringify(reply));
     }
-    next();
+    client.message(msgText, {}).then((data) =>{
+
+    }).catch(()=>{next()});
 });
 
 /*  TODO: Figure out how to add functions to classes. 
