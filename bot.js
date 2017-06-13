@@ -27,7 +27,7 @@ var Conversation = Constants.Conversation;
 /*----------------------------------------------------------------------------------------------------*/
 
 // Webserver parameter setup
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 9000
 const app = express();
 const client = new Wit({ accessToken: Constants._TOKEN }); // Wit.ai client
 
@@ -53,7 +53,9 @@ app.use((req, res, next) => {
 // Function to check if the given tag is valid
 // TODO: write functionality to connect to db and check if valid tag
 function isValidTag(tag){
-    return true;
+    if(['00000', '11111', '22222'].indexOf(tag) != -1)
+        return true;
+    return false;
 }
 
 // ID generator: returns new ID
@@ -77,8 +79,8 @@ app.use(_ENDPOINT + 'message', (req, res, next) => { // Reject if expired sessio
     if ((req.session.conversation == undefined) || !ID_DB.exists(req.session.conversation.id)) {
         var reply = new Message();
         reply.conversation = undefined;
-        reply.from.id = Constants._BOT_ID // Default Bot ID
-        reply.from.name = '_bot';
+        reply.from = Constants._BOT_ID // Default Bot ID
+        // reply.from.name = '_bot';
         reply.type = Constants.MTYPE.Error;
         reply.text = "Session Expired";
         return res.status(401).end(reply.toString());
@@ -104,6 +106,7 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
     // debugPrint('HH: ' + req.message.text);
     // Creating a client Message instance to add to conversation
     var msgText = req.message.text;
+    console.log("msg: " + msgText);
     var msg = CONV_DB[req.session.convID].createMessage();
     msg.from = req.session.convID;
     msg.recepient = Constants._BOT_ID;
