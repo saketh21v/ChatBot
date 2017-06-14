@@ -9,8 +9,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var crypto = require('crypto');
-var util = require('./lib/util.js');
 
+var util = require('./lib/util.js');
+var englishParser = require('./lib/englishParser.js');
 /*----------------------------------------------------------------------------------------------------*/
 
 // Constants
@@ -131,20 +132,43 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
         req.session.destroy();
         return res.status(200).end(reply.toString());
     }
-    // If serviceTag request is alive,[i.e., conversation.serviceTagRequest == true]
-    if (req.session.conversation.serviceTagRequest) {
+    // If serviceTag request is alive,[i.e., conversation.requestType == CRTYPE.ServiceTagRequest]
+    if (req.session.conversation.requestType == Constants.CRTYPE.ServiceTagRequest) {
         if (!isValidTag(msgText)) { // Re-request if service tag is not valid.
             var reply = CONV_DB[req.session.convID].createMessage();
             reply.type = Constants.MTYPE.RequestServiceTag;
             reply.text = "Please input only your service tag.";
-            req.session.conversation.serviceTagRequest = true;
+            req.session.conversation.requestType = Constants.CRTYPE.ServiceTagRequest;
             return res.status(200).end(reply.toString());
         }else{
             req.session.conversation.serviceTag = msgText;
-            req.session.conversation.serviceTagRequest = false;
+            req.session.conversation.requestType = Constants.CRTYPE.DescriptionRequest;
             var reply = CONV_DB[req.session.convID].createMessage();
-            reply.type = Constants.MTYPE.Message;
+            reply.type = Constants.MTYPE.RequestDescription;
             reply.text = "Please give a description of your problem.";
+            return res.status(200).end(reply.toString());
+        }
+    }
+
+    if(req.session.conversation.requestType == Constants.CRTYPE.DescriptionRequest){
+        debugPrint('ReqType: ' + req.session.conversation.requestType);
+        debugPrint('In Desxription Request');
+        var desc = msgText;
+        req.session.conversation.requestType = Constants.CRTYPE.NoRequest;
+        var keyWords = englishParser.stripStopWords(desc);
+
+        var reply = CONV_DB[req.session.convID].createMessage();
+        reply.type = Constants.MTYPE.SolutionFAQs;
+        reply.text = "Sorry. We couldn't find any solution";
+        // TODO: Remember to change client code to add "Was that helpful" after displaying this message.
+        return res.status(200).end(reply.toString());
+    }
+
+    if(req.session.conversation.requestType == Constants.CRTYPE.NoRequest){
+        if(["No", "Nope", "Not at all", "It was not helpful"].indexOf(msgText) != -1){
+            var reply = CONV_DB[req.session.convID].createMessage();
+            reply.text = "Connecting to experts.";
+            reply.type = Constants.MTYPE.Message;
             return res.status(200).end(reply.toString());
         }
     }
@@ -152,7 +176,7 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
     // msgText = "My mouse is troubling me";
     client.message(msgText, {})
         .then((data) => {
-            // console.log(JSON.stringify(data));
+            console.log(JSON.stringify(data));
             if (data.entities['intent'] != undefined) msg.intent = data.entities['intent'][0].value;
             // var reply = Replies.CreateReply();
             if (data.entities['product'] != undefined) {
@@ -162,7 +186,7 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
                     reply.type = Constants.MTYPE.RequestServiceTag;
                     reply.text = "Please provide your device's service tag";
 
-                    req.session.conversation.serviceTagRequest = true;
+                    req.session.conversation.requestType = Constants.CRTYPE.ServiceTagRequest;
 
                     return res.status(200).end(reply.toString());
                 }
