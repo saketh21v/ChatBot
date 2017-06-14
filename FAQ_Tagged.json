@@ -1,0 +1,415 @@
+{
+    "FAQs": [
+        {
+            "ques": "How long does a Dell laptop battery last? When should I consider replacing mine?",
+            "answer": "All rechargeable batteries wear out with time and usage.  As time and cumulative use increase, the performance will degrade. For the typical user, noticeable reduction in run time generally will be observed after 18 to 24 months.  For a power user, reduction in run time generally may be experienced prior to 18 months. We recommend buying a new Dell laptop battery when the run time does not meet your needs. ",
+            "tags": [
+                "dell",
+                "laptop",
+                "battery",
+                "replacing"
+            ]
+        },
+        {
+            "ques": "How should I choose between two batteries with different Watt hours (Whr) available on one system?",
+            "answer": "Higher Watt hours (Whr) on the same system under the same operating conditions will generally deliver longer battery run time.  For example, if you compare the same system, running the same applications, the 53Whr battery would provide approximately 65% more run time than the 32Whr battery.",
+            "tags": [
+                "batteries",
+                "different",
+                "watt",
+                "hours",
+                "(whr)",
+                "available"
+            ]
+        },
+        {
+            "ques": "How long am I able to use my Dell laptop on a fully charged battery?",
+            "answer": "Many factors affect the amount of time that a portable computer battery can deliver power before it must be recharged. These factors include the configuration (processor, memory, etc.), types of applications being run and display brightness.Dell uses industry standard benchmarks for battery run time claims.  For more information on battery run times and benchmarks, the white paper, 'Understanding Battery Life in Portable Computers' is available at: http://www.dell.com/downloads/global/vectors/2005_batterylife.pdf",
+            "tags": [
+                "dell",
+                "laptop",
+                "fully",
+                "charged",
+                "battery"
+            ]
+        },
+        {
+            "ques": "How do I charge my Dell laptop battery? ",
+            "answer": "The battery charges in the laptop when the laptop is connected to an AC power source via the AC adapter.",
+            "tags": [
+                "dell",
+                "laptop",
+                "battery"
+            ]
+        },
+        {
+            "ques": "How long does it take for a Dell laptop battery to fully recharge?",
+            "answer": "The charge time varies depending on the system.  If the system supports ExpressChargeTM , the battery typically will have greater than 80% charge after about an hour of charging, and fully charge in about 2 hours with the system off.",
+            "tags": [
+                "dell",
+                "laptop",
+                "battery",
+                "fully",
+                "recharge"
+            ]
+        },
+        {
+            "ques": "What is ExpressChargeTM?",
+            "answer": "For a system advertised as having the ExpressChargeTM  feature, the battery typically will have greater than 80% charge after about an hour of charging and fully charge in about 2 hours with the system off.",
+            "tags": [
+                "expresschargetm"
+            ]
+        },
+        {
+            "ques": "Should I totally discharge, then recharge my Dell laptop battery occasionally to make it last longer?",
+            "answer": "No, discharging and charging does not increase the life of a Lithium Ion technology battery.",
+            "tags": [
+                "totally",
+                "discharge,",
+                "recharge",
+                "dell",
+                "laptop",
+                "battery",
+                "occasionally",
+                "longer"
+            ]
+        },
+        {
+            "ques": "Can a Dell laptop battery be 'overcharged'? ",
+            "answer": "No, the battery is designed to stop using the charger when it reaches full charge.",
+            "tags": [
+                "dell",
+                "laptop",
+                "battery",
+                "'overcharged'"
+            ]
+        },
+        {
+            "ques": "When docked or AC adapter is plugged into a wall outlet, am I using my battery charge? ",
+            "answer": "No.",
+            "tags": [
+                "docked",
+                "ac",
+                "adapter",
+                "plugged",
+                "into",
+                "outlet,",
+                "using",
+                "battery"
+            ]
+        },
+        {
+            "ques": "Does Dell sell external battery chargers?",
+            "answer": "Dell offers a Datamation battery charger for large institution customers. The charger has 16 charge bays to charge batteries for Latitude D500/D505/D510/D520/D600/D610 laptop systems.",
+            "tags": [
+                "dell",
+                "external",
+                "battery",
+                "chargers"
+            ]
+        },
+        {
+            "ques": "Is it easy to install a battery?",
+            "answer": "Yes, very easy. First, make sure all open files are saved.  Next, either attach the AC adapter directly to the laptop or set the system to 'hibernate' mode or shut off.  Release the latch on the current battery, and simply install the replacement battery.",
+            "tags": [
+                "easy",
+                "install",
+                "battery"
+            ]
+        },
+        {
+            "ques": "Will Dell laptops accept non-Dell batteries?",
+            "answer": "Dell has a rigorous qualification process by which all Dell batteries are validated to ensure proper function, performance and safety. Some non-Dell batteries are available in the market with claims of compatibility with Dell systems. Dell cannot verify these claims, nor the safety of using them in a Dell system. Dell strongly encourages our customers to use only Dell laptop batteries advertised as appropriate for their laptop model. Only Dell laptop batteries come with a 1-year warranty, are engineered for optimal safety and performance for Dell systems, and are supported by Dell technical support for the length of the warranty period.",
+            "tags": [
+                "dell",
+                "laptops",
+                "accept",
+                "non-dell",
+                "batteries"
+            ]
+        },
+        {
+            "ques": "What is a modular bay battery?",
+            "answer": "In some laptop systems Dell offers a battery that can be used in the optical drive media bay (DVD/CD drive bay). This enables the use of two batteries, potentially extending the available run time.",
+            "tags": [
+                "modular",
+                "bay",
+                "battery"
+            ]
+        },
+        {
+            "ques": "If I install a modular bay battery, are my primary and modular bay batteries working at the same time to power my laptop computer?",
+            "answer": "No, the modular bay battery is used first, then the system automatically switches to the primary battery.  This is a deliberate design to allow the most amount of run time to remain in the primary battery in case the modular bay battery is removed and replaced with an optical drive.",
+            "tags": [
+                "install",
+                "modular",
+                "bay",
+                "battery,",
+                "primary",
+                "modular",
+                "bay",
+                "batteries",
+                "working",
+                "laptop",
+                "computer"
+            ]
+        },
+        {
+            "ques": " For what use is the strip of LED lights on my battery?",
+            "answer": " Most Dell batteries have an LED indicator that allows users to see how much run time and how much overall battery life are available at the touch of a button.",
+            "tags": [
+                "strip",
+                "lights",
+                "battery"
+            ]
+        },
+        {
+            "ques": "What does Dell recommend for battery storage for a long period of time? ",
+            "answer": "When storing for more than 4 days these guidelines can better preserve the life of your battery:Do not store batteries for long periods plugged into or attached to any power source.  This includes AC adapters and laptop security carts plugged into an outlet. Laptop batteries, including those stored in laptop systems, should maintain an Operational Storage Temperature of 0  to 35 C (32  to 95 F). Batteries may be stored in the laptop or outside of the laptop.Charge batteries before storing. The recommended charging time should not exceed 1 hour.  Typically, this should charge the battery to between 80% and 100%.  (Some discharge will take place over time.  Stored batteries are expected to discharge 10-15% over a four month period, for your information.)",
+            "tags": [
+                "dell",
+                "recommend",
+                "battery",
+                "storage"
+            ]
+        },
+        {
+            "ques": "Are there restriction with taking lithium-ion batteries on planes?",
+            "answer": "Effective January 1, 2008, the Department of Transportation (DOT) through the Pipeline and Hazardous Materials Safety Administration (PHMSA) will no longer allow loose lithium batteries in checked baggage. These batteries may continue to be packed in carry-on baggage.",
+            "tags": [
+                "restriction",
+                "taking",
+                "lithium-ion",
+                "batteries",
+                "planes"
+            ]
+        },
+        {
+            "ques": "How should I choose the right battery for my new system?",
+            "answer": "When choosing a battery, the main quality that you need to consider is the amount of energy that can be stored in a battery.  This is measured in Watt- Hours (Wh).  For longer runtime per charge, choose a battery with a greater Wh rating",
+            "tags": [
+                "battery"
+            ]
+        },
+        {
+            "ques": "What is a battery slice?",
+            "answer": "Some Dell laptops have a battery that attaches to the bottom of the system, providing additional runtime for the laptop.",
+            "tags": [
+                "battery",
+                "slice"
+            ]
+        },
+        {
+            "ques": "Does Dell recommend the use of a non-Dell replacement battery?",
+            "answer": "Dell recommends that you replace your battery with a genuine Dell battery obtained from Dell.  When using a genuine Dell battery, you can be assured that you have a battery that has been designed, qualified and manufactured to strict Dell quality standards.  For safety and performance always use a genuine Dell battery purchased from Dell.  ",
+            "tags": [
+                "dell",
+                "recommend",
+                "non-dell",
+                "replacement",
+                "battery"
+            ]
+        },
+        {
+            "ques": "Will non-Dell batteries work in Dell laptops?",
+            "answer": "Some non-Dell batteries are available in the market with claims of compatibility with Dell laptops. Dell does not verify these claims or the safety of using them in a Dell laptop. Dell strongly encourages our customers to use only Dell laptop batteries advertised as appropriate for their laptop model. Only Dell batteries are engineered for optimal safety and performance for Dell systems and are supported by Dell technical support for the length of the limited hardware warranty period. ",
+            "tags": [
+                "non-dell",
+                "batteries",
+                "work",
+                "dell",
+                "laptops"
+            ]
+        },
+        {
+            "ques": "How can I get information on the health state of my battery?",
+            "answer": "On select notebooks there is a tool in the Dell ControlPoint (DCP) module that can show the health status of the battery. ",
+            "tags": [
+                "information",
+                "health",
+                "battery"
+            ]
+        },
+        {
+            "ques": "What can I do to make my battery last longer?",
+            "answer": "There are several things you can do to make your battery last longer: ",
+            "tags": [
+                "battery",
+                "longer"
+            ]
+        },
+        {
+            "ques": "How do I get the most runtime for a charge?",
+            "answer": "It is important to choose settings which allow you to obtain the most runtime from your notebook.  Examples to consider:  timeout settings for the hard drive, Bluetooth, wireless, LCD brightness, etc. ",
+            "tags": [
+                "runtime"
+            ]
+        },
+        {
+            "ques": "How long does a Dell laptop battery last? ",
+            "answer": "The life span of a laptop battery depends on a number of factors and is hard to predict. All rechargeable batteries wear out with time and use.  As the battery begins to reach the end of its life, you will notice a decline in the runtime of the battery. ",
+            "tags": [
+                "dell",
+                "laptop",
+                "battery"
+            ]
+        },
+        {
+            "ques": "How long am I able to use my Dell laptop on a fully charged battery?  ",
+            "answer": "Many factors affect the amount of time that a laptop battery can deliver power before it must be recharged. Personal usage (your LCD brightness setting) has a large effect on battery run time and will vary greatly between different users and systems. Other factors include the system configuration (battery size, processor type, memory, etc.), and the types of applications being run (playing DVDs or games).",
+            "tags": [
+                "dell",
+                "laptop",
+                "fully",
+                "charged",
+                "battery"
+            ]
+        },
+        {
+            "ques": "Should I completely discharge my battery before I charge it?",
+            "answer": "No, with current lithium ion batteries this practice does not improve the runtime of the battery.  This practice is a holdover from the days in which NiMH batteries were used.",
+            "tags": [
+                "completely",
+                "discharge",
+                "battery"
+            ]
+        },
+        {
+            "ques": "Should I totally discharge, then recharge my DellT laptop battery occasionally to make it last longer? ",
+            "answer": "No, discharging and charging does not increase the life of a lithium ion battery.",
+            "tags": [
+                "totally",
+                "discharge,",
+                "recharge",
+                "dellt",
+                "laptop",
+                "battery",
+                "occasionally",
+                "longer"
+            ]
+        },
+        {
+            "ques": "Can a Dell laptop battery be 'overcharged'?  ",
+            "answer": "No, the battery is designed to stop using the charger when it reaches full charge.",
+            "tags": [
+                "dell",
+                "laptop",
+                "battery",
+                "'overcharged'"
+            ]
+        },
+        {
+            "ques": "How do I charge my Dell laptop battery?",
+            "answer": "The battery charges in the laptop when the laptop is connected to an AC power source.",
+            "tags": [
+                "dell",
+                "laptop",
+                "battery"
+            ]
+        },
+        {
+            "ques": "What is ExpressChargeT? ",
+            "answer": "For a battery advertised as having the ExpressChargeT feature, the battery typically will have greater than 80% charge after about an hour of charging with the system off, and fully charge in about 2 hours with the system off.",
+            "tags": [
+                "expresscharget"
+            ]
+        },
+        {
+            "ques": "How long does it take for a Dell laptop battery to fully recharge? ",
+            "answer": "The charge time varies depending on the system. If the battery supports ExpressChargeT, the battery typically will have greater than 80% charge after about an hour of charging with the system off, and fully charge in about 2 hours with the system off.   Batteries that do not support ExpressChargeT typically charge in about 3 hours with the system off.  See your system's user's manual for more information.",
+            "tags": [
+                "dell",
+                "laptop",
+                "battery",
+                "fully",
+                "recharge"
+            ]
+        },
+        {
+            "ques": "Do I need to charge my battery fully when I get a new system or a new battery?",
+            "answer": "While not required, it is recommended to fully charge your battery.",
+            "tags": [
+                "battery",
+                "fully",
+                "battery"
+            ]
+        },
+        {
+            "ques": "I generally do not unplug/undock my notebook.  Does this hurt the battery?",
+            "answer": "No, the battery has built in controls which stop the charging process when the battery is full.",
+            "tags": [
+                "generally",
+                "not",
+                "unplug/undock",
+                "notebook.",
+                "hurt",
+                "battery"
+            ]
+        },
+        {
+            "ques": "When docked or AC adapter is plugged into a wall outlet, am I using my battery charge?  ",
+            "answer": "No, the notebook is powered by AC power.",
+            "tags": [
+                "docked",
+                "ac",
+                "adapter",
+                "plugged",
+                "into",
+                "outlet,",
+                "using",
+                "battery"
+            ]
+        },
+        {
+            "ques": "What are the LED lights on my battery? ",
+            "answer": "To check battery charge, press the button and the number of LED lights that appear will tell you charge status. If all lights appear, you have a fully charged battery. Each light that appears accounts for approximately 20% charge.",
+            "tags": [
+                "lights",
+                "battery"
+            ]
+        },
+        {
+            "ques": "What does it mean when I push the button on the battery to determine the amount of charge, and alternating LED lights flash?",
+            "answer": "This is an indication that the battery is not working properly.  The battery should be replaced.",
+            "tags": [
+                "button",
+                "battery",
+                "amount",
+                "charge,",
+                "alternating",
+                "lights",
+                "flash"
+            ]
+        },
+        {
+            "ques": "How does Dell recommend batteries be stored for a long period of time?  ",
+            "answer": "For extended storage (over 21 - 30 days), these guidelines can better preserve the life of your battery:",
+            "tags": [
+                "dell",
+                "recommend",
+                "batteries",
+                "stored"
+            ]
+        },
+        {
+            "ques": "Why does the battery have a different warranty period than my system?",
+            "answer": "Dell's standard battery warranty is one year. Batteries are a consumable item. All batteries degrade with time and use.  The warranty is very similar to common auto warranties which exclude consumable items such as tires. ",
+            "tags": [
+                "battery",
+                "different",
+                "warranty"
+            ]
+        },
+        {
+            "ques": "Where can I find the Materials Safety Datasheet (MSDS) for my battery? ",
+            "answer": "To find the MSDS for a specific battery, please see the Product Safety, EMC and Environmental Datasheet published within the drop-down menus at this website:  http://www.dell.com/regulatory_compliance_datasheetsIf you are seeking a Materials Safety Datasheet for a product(s) which is no longer available for purchase, please send an e-mail to the Regulatory_Compliance@dell.com mailbox with the laptop computer name and the battery part number for the relevant product(s) included in the body of the e-mail.   Top",
+            "tags": [
+                "materials",
+                "safety",
+                "datasheet",
+                "(msds)",
+                "battery"
+            ]
+        }
+    ]
+}
