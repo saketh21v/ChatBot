@@ -12,6 +12,7 @@ var crypto = require('crypto');
 
 var util = require('./lib/util.js');
 var englishParser = require('./lib/englishParser.js');
+var findFAQs = require('./lib/findFAQ.js');
 /*----------------------------------------------------------------------------------------------------*/
 
 // Constants
@@ -53,8 +54,8 @@ app.use((req, res, next) => {
 // Util functions
 // Function to check if the given tag is valid
 // TODO: write functionality to connect to db and check if valid tag
-function isValidTag(tag){
-    if(['00000', '11111', '22222'].indexOf(tag) != -1)
+function isValidTag(tag) {
+    if (['00000', '11111', '22222'].indexOf(tag) != -1)
         return true;
     return false;
 }
@@ -84,6 +85,7 @@ app.use(_ENDPOINT + 'message', (req, res, next) => { // Reject if expired sessio
         // reply.from.name = '_bot';
         reply.type = Constants.MTYPE.Error;
         reply.text = "Session Expired";
+        res.setHeader('Content-Type', 'application/json');
         return res.status(401).end(reply.toString());
     }
     next();
@@ -97,8 +99,9 @@ app.get(_ENDPOINT + 'id', function (req, res) {
     req.session.conversation = new Conversation(id);
     var reply = CONV_DB[id].createMessage();
     reply.type = Constants.MTYPE.ID_Message;
-    reply.message = {"id": id};
-    res.status(200).end(reply.toString());
+    reply.message = { "id": id };
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).end(reply.toString());
     // debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
 });
 
@@ -111,7 +114,7 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
     var msg = CONV_DB[req.session.convID].createMessage();
     msg.from = req.session.convID;
     msg.recepient = Constants._BOT_ID;
-    msg.text =  msgText;
+    msg.text = msgText;
     msg.timestamp = Date.now();
     msg.type = Constants.MTYPE.UserMessage;
 
@@ -121,6 +124,7 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
             var reply = CONV_DB[req.session.convID].createMessage();
             reply.type = Constants.MTYPE.Message;
             reply.text = "Good day to you. What can I help you with?";
+            res.setHeader('Content-Type', 'application/json');
             return res.status(200).end(reply.toString());
         }
     }
@@ -130,6 +134,7 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
         reply.text = "Bye! Please visit again :p";
         delete CONV_DB[req.session.convID];
         req.session.destroy();
+        res.setHeader('Content-Type', 'application/json');
         return res.status(200).end(reply.toString());
     }
     // If serviceTag request is alive,[i.e., conversation.requestType == CRTYPE.ServiceTagRequest]
@@ -139,36 +144,42 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
             reply.type = Constants.MTYPE.RequestServiceTag;
             reply.text = "Please input only your service tag.";
             req.session.conversation.requestType = Constants.CRTYPE.ServiceTagRequest;
+            res.setHeader('Content-Type', 'application/json');
             return res.status(200).end(reply.toString());
-        }else{
+        } else {
             req.session.conversation.serviceTag = msgText;
             req.session.conversation.requestType = Constants.CRTYPE.DescriptionRequest;
             var reply = CONV_DB[req.session.convID].createMessage();
             reply.type = Constants.MTYPE.RequestDescription;
             reply.text = "Please give a description of your problem.";
+            res.setHeader('Content-Type', 'application/json');
             return res.status(200).end(reply.toString());
         }
     }
 
-    if(req.session.conversation.requestType == Constants.CRTYPE.DescriptionRequest){
+    if (req.session.conversation.requestType == Constants.CRTYPE.DescriptionRequest) {
         debugPrint('ReqType: ' + req.session.conversation.requestType);
         debugPrint('In Desxription Request');
         var desc = msgText;
         req.session.conversation.requestType = Constants.CRTYPE.NoRequest;
         var keyWords = englishParser.stripStopWords(desc);
 
+        var answer = findFAQs.getAnswer(keyWords);
+
         var reply = CONV_DB[req.session.convID].createMessage();
         reply.type = Constants.MTYPE.SolutionFAQs;
-        reply.text = "Sorry. We couldn't find any solution";
+        reply.text = answer;
         // TODO: Remember to change client code to add "Was that helpful" after displaying this message.
+        res.setHeader('Content-Type', 'application/json');
         return res.status(200).end(reply.toString());
     }
 
-    if(req.session.conversation.requestType == Constants.CRTYPE.NoRequest){
-        if(["No", "Nope", "Not at all", "It was not helpful"].indexOf(msgText) != -1){
+    if (req.session.conversation.requestType == Constants.CRTYPE.NoRequest) {
+        if (["No", "Nope", "Not at all", "It was not helpful"].indexOf(msgText) != -1) {
             var reply = CONV_DB[req.session.convID].createMessage();
             reply.text = "Connecting to experts.";
             reply.type = Constants.MTYPE.Message;
+            res.setHeader('Content-Type', 'application/json');
             return res.status(200).end(reply.toString());
         }
     }
@@ -187,7 +198,7 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
                     reply.text = "Please provide your device's service tag";
 
                     req.session.conversation.requestType = Constants.CRTYPE.ServiceTagRequest;
-
+                    res.setHeader('Content-Type', 'application/json');
                     return res.status(200).end(reply.toString());
                 }
             }
@@ -206,6 +217,7 @@ app.post(_ENDPOINT + 'message', function (req, res) {
     var reply = CONV_DB[req.session.convID].createMessage();
     reply.type = Constants.MTYPE.DefaultMessage;
     reply.text = "I didn't get that. Could you please rephrase?";
+    res.setHeader('Content-Type', 'application/json');
     res.status(200).end(reply.toString());
 });
 
