@@ -222,6 +222,10 @@ app.post(_ENDPOINT + 'message', function (req, res) {
     res.status(200).end(reply.toString());
 });
 
+app.get("/", function(req, res){
+    res.end("Nothing here.");
+});
+
 /*----------------------------------------------------------------------------------------------------*/
 // Setup and Start the server
 
