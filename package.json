@@ -4,7 +4,7 @@
   "description": "Chat bot for Dell customer Service",
   "main": "bot.js",
   "scripts": {
-    "start": "nodemon bot.js"
+    "start": "node bot.js"
   },
   "author": "Saketh Vallakatla",
   "license": "ISC",
