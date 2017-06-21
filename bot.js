@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 // TODO: write functionality to connect to db and check if valid tag
 function isValidTag(tag) {
     // if (['00000', '11111', '22222'].indexOf(tag) != -1)
-        return true;
+    return true;
     // return false;
 }
 
@@ -182,6 +182,15 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
             reply.type = Constants.MTYPE.Message;
             res.setHeader('Content-Type', 'application/json');
             return res.status(200).end(reply.toString());
+        } else {
+            if (["Yes", "Yup", "Absolutely"].indexOf(msgText) != -1) {
+                req.session.conversation.requestType = Constants.CRTYPE.Default;
+                var reply = CONV_DB[req.session.convID].createMessage();
+                reply.text = "Glad to be of help.";
+                reply.type = Constants.MTYPE.Message;
+                res.setHeader('Content-Type', 'application/json');
+                return res.status(200).end(reply.toString());
+            }
         }
     }
 
@@ -222,7 +231,7 @@ app.post(_ENDPOINT + 'message', function (req, res) {
     res.status(200).end(reply.toString());
 });
 
-app.get("/", function(req, res){
+app.get("/", function (req, res) {
     res.end("Nothing here.");
 });
 
