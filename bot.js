@@ -29,7 +29,7 @@ var Conversation = Constants.Conversation;
 /*----------------------------------------------------------------------------------------------------*/
 
 // Webserver parameter setup
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 const app = express();
 const client = new Wit({ accessToken: Constants._TOKEN }); // Wit.ai client
 
