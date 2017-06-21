@@ -55,9 +55,9 @@ app.use((req, res, next) => {
 // Function to check if the given tag is valid
 // TODO: write functionality to connect to db and check if valid tag
 function isValidTag(tag) {
-    if (['00000', '11111', '22222'].indexOf(tag) != -1)
+    // if (['00000', '11111', '22222'].indexOf(tag) != -1)
         return true;
-    return false;
+    // return false;
 }
 
 // ID generator: returns new ID
