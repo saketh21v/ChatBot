@@ -1,0 +1,44 @@
+<LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"/>
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_corner"
+                    android:padding="16dp"
+                    android:text="Android"
+                    android:textAlignment="viewEnd"
+                    android:textColor="#000000" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/layout2"
+                android:layout_below="@+id/layout1"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView5"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/rounded_corner1"
+                    android:padding="16dp"
+                    android:text="Android Chatting Application"
+                    android:textColor="#000000" />
+                <View
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>

@@ -29,7 +29,7 @@ var Conversation = Constants.Conversation;
 /*----------------------------------------------------------------------------------------------------*/
 
 // Webserver parameter setup
-const PORT = process.env.PORT || 9000
+const PORT = process.env.PORT || 5000
 const app = express();
 const client = new Wit({ accessToken: Constants._TOKEN }); // Wit.ai client
 
@@ -100,6 +100,7 @@ app.get(_ENDPOINT + 'id', function (req, res) {
     var reply = CONV_DB[id].createMessage();
     reply.type = Constants.MTYPE.ID_Message;
     reply.message = { "id": id };
+    console.log('{"id: "' + id + "}");
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).end(reply.toString());
     // debugPrint('ID Request addressed. Sent ID : ' + JSON.stringify({ id: id }));
@@ -168,7 +169,7 @@ app.use(_ENDPOINT + 'message', function (req, res, next) {
 
         var reply = CONV_DB[req.session.convID].createMessage();
         reply.type = Constants.MTYPE.SolutionFAQs;
-        reply.text = answer;
+        reply.text = answer + "\n\n" + "Are you satisfied with the answer?";
         // TODO: Remember to change client code to add "Was that helpful" after displaying this message.
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).end(reply.toString());
@@ -215,7 +216,7 @@ app.post(_ENDPOINT + 'message', function (req, res) {
     // debugPrint("ID : " + req.session.conversation.id);
     // debugPrint('Message Received: ' + req.message.message);
     var reply = CONV_DB[req.session.convID].createMessage();
-    reply.type = Constants.MTYPE.DefaultMessage;
+    reply.type = Constants.MTYPE.Message;
     reply.text = "I didn't get that. Could you please rephrase?";
     res.setHeader('Content-Type', 'application/json');
     res.status(200).end(reply.toString());
